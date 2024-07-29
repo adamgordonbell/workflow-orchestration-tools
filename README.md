@@ -11,7 +11,7 @@ flowchart TD
     D --> E{Receive submission data}
     E -->|Timeout| F[Cancel submission]
     E -->|Received| G[Move to review]
-    G --> H{Validate URL}
+    G --> H{External: Validate URL}
     H -->|Invalid| I[Reject tool]
     H -->|Valid| J[Approve tool]
 ```

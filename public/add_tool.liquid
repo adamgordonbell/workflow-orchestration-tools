@@ -12,7 +12,7 @@
         <h1 class="text-3xl font-bold mb-8 text-center">Submit New Tool</h1>
         <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6" role="alert">
             <p class="font-bold">Important:</p>
-            <p>You have 2 minutes to complete this submission. Time remaining: <span id="countdown" class="font-bold"></span></p>
+            <p> Time remaining: <span id="countdown" class="font-bold"></span></p>
         </div>
         <form id="addToolForm" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
             <input type="hidden" id="toolId" value="{{ toolId }}">
@@ -90,7 +90,7 @@
 
 <script>
     // Configuration for countdown timer
-    const COUNTDOWN_DURATION = 2 * 60; // 2 minutes in seconds
+    const COUNTDOWN_DURATION = 30; // 2 minutes in seconds
 
     // Set the countdown timer
     let timeLeft = COUNTDOWN_DURATION;

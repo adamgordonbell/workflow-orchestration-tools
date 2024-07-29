@@ -264,7 +264,8 @@ export class ShopUtilities {
   @Transaction()
   static async validateToolUrl(ctxt: KnexTransactionContext, url: string): Promise<boolean> {
     ctxt.logger.info(`Starting URL validation for: ${url}`);
-    await new Promise(resolve => setTimeout(resolve, 60000));
+    // throw new Error("Random URL service failure");
+    await new Promise(resolve => setTimeout(resolve, 30000));
     try {
       new URL(url);
       ctxt.logger.info(`URL validation successful for: ${url}`);

@@ -68,7 +68,7 @@ export class Shop {
     try {
       ctxt.logger.info(`Starting tool submission workflow for tool ${toolId}`);
 
-      const submission = await ctxt.recv<string>(TOOL_SUBMISSION_TOPIC, 120);
+      const submission = await ctxt.recv<string>(TOOL_SUBMISSION_TOPIC, 30);
 
       if (!submission) {
         ctxt.logger.warn(`Tool submission ${toolId} timed out`);

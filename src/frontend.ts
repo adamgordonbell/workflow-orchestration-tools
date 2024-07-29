@@ -61,12 +61,14 @@ export class Frontend {
     const inReviewTools = allTools.filter(tool => tool.status === ToolSubmissionStatus.IN_REVIEW);
     const approvedTools = allTools.filter(tool => tool.status === ToolSubmissionStatus.APPROVED);
     const rejectedTools = allTools.filter(tool => tool.status === ToolSubmissionStatus.REJECTED);
+    const cancelledTools = allTools.filter(tool => tool.status === ToolSubmissionStatus.CANCELLED);
 
     return await render("tool_submissions", {
       pendingTools,
       inReviewTools,
       approvedTools,
-      rejectedTools
+      rejectedTools,
+      cancelledTools
     });
   }
 
