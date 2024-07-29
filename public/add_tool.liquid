@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit New Tool - Workflow Orchestration Tools</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto py-8">
+        <h1 class="text-3xl font-bold mb-8 text-center">Submit New Tool</h1>
+        <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6" role="alert">
+            <p class="font-bold">Important:</p>
+            <p>You have 2 minutes to complete this submission. Time remaining: <span id="countdown" class="font-bold"></span></p>
+        </div>
+        <form id="addToolForm" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <input type="hidden" id="toolId" value="{{ toolId }}">
+             <input type="hidden" id="workflowUUID">
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="name">
+                    Tool Name
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" type="text" placeholder="Tool Name" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="description">
+                    Description
+                </label>
+                <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="description" placeholder="Tool Description" required></textarea>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="website_url">
+                    Website URL
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="website_url" type="text" placeholder="https://example.com" required>
+            </div>
+            <div class="mb-4">
+                <span class="block text-gray-700 text-sm font-bold mb-2">Supports Transactional Execution?</span>
+                <div class="mt-2">
+                    <label class="inline-flex items-center">
+                        <input type="radio" class="form-radio" name="transactional_execution" value="true" required>
+                        <span class="ml-2">Yes</span>
+                    </label>
+                    <label class="inline-flex items-center ml-6">
+                        <input type="radio" class="form-radio" name="transactional_execution" value="false">
+                        <span class="ml-2">No</span>
+                    </label>
+                </div>
+            </div>
+            <div class="mb-4">
+                <span class="block text-gray-700 text-sm font-bold mb-2">High Performance?</span>
+                <div class="mt-2">
+                    <label class="inline-flex items-center">
+                        <input type="radio" class="form-radio" name="high_performance" value="true" required>
+                        <span class="ml-2">Yes</span>
+                    </label>
+                    <label class="inline-flex items-center ml-6">
+                        <input type="radio" class="form-radio" name="high_performance" value="false">
+                        <span class="ml-2">No</span>
+                    </label>
+                </div>
+            </div>
+            <div class="mb-4">
+                <span class="block text-gray-700 text-sm font-bold mb-2">Cloud Scalability?</span>
+                <div class="mt-2">
+                    <label class="inline-flex items-center">
+                        <input type="radio" class="form-radio" name="cloud_scalability" value="true" required>
+                        <span class="ml-2">Yes</span>
+                    </label>
+                    <label class="inline-flex items-center ml-6">
+                        <input type="radio" class="form-radio" name="cloud_scalability" value="false">
+                        <span class="ml-2">No</span>
+                    </label>
+                </div>
+            </div>
+            <div class="mb-6">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="primary_language">
+                    Primary Language
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="primary_language" name="primary_language" type="text" placeholder="e.g., Python, Java, Go" required>
+            </div>
+            <div class="flex items-center justify-between">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                    Submit Tool
+                </button>
+            </div>
+        </form>
+    </div>
+
+<script>
+    // Configuration for countdown timer
+    const COUNTDOWN_DURATION = 2 * 60; // 2 minutes in seconds
+
+    // Set the countdown timer
+    let timeLeft = COUNTDOWN_DURATION;
+    const countdownElement = document.getElementById('countdown');
+
+    function updateCountdown() {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        countdownElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        if (timeLeft <= 0) {
+            clearInterval(countdownTimer);
+            alert('Time\'s up! Your reservation has expired.');
+            window.location.href = '/';
+        }
+        timeLeft--;
+    }
+
+    const countdownTimer = setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    // Handle URL parameters
+    function getQueryParams() {
+        const params = new URLSearchParams(window.location.search);
+        return {
+            workflowUUID: params.get('workflowUUID')
+        };
+    }
+
+    const queryParams = getQueryParams();
+    document.getElementById('workflowUUID').value = queryParams.workflowUUID;
+
+    // Handle form submission
+    document.getElementById('addToolForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const submitButton = form.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
+        submitButton.textContent = 'Submitting...';
+
+        // Debug: Log all form elements
+        console.log('Form elements:', form.elements);
+
+        const toolData = {
+            toolId: parseInt(form.toolId.value),
+            workflowUUID: form.workflowUUID.value,
+            name: form.name.value,
+            description: form.description.value,
+            website_url: form.website_url.value,
+            transactional_execution: form.querySelector('input[name="transactional_execution"]:checked')?.value === 'true',
+            high_performance: form.querySelector('input[name="high_performance"]:checked')?.value === 'true',
+            cloud_scalability: form.querySelector('input[name="cloud_scalability"]:checked')?.value === 'true',
+            primary_language: form.primary_language.value
+        };
+
+        // Ensure boolean values are explicitly set
+        toolData.transactional_execution = !!toolData.transactional_execution;
+        toolData.high_performance = !!toolData.high_performance;
+        toolData.cloud_scalability = !!toolData.cloud_scalability;
+
+        console.log('Submitting tool data:', toolData);
+
+        // Debug: Log the toolData object
+        console.log('Tool data:', toolData);
+
+        try {
+            const response = await axios.post('/submit-tool', toolData);
+            if (response.status === 200) {
+                alert(response.data);
+                window.location.href = '/';
+            } else {
+                alert('Failed to submit tool. ' + response.data);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
+        } finally {
+            submitButton.disabled = false;
+            submitButton.textContent = 'Submit Tool';
+        }
+    });
+</script>
+
+</body>
+</html>

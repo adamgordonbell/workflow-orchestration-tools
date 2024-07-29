@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ tool.name }} - Tool Submission Details</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-900 font-sans">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-6">{{ tool.name }}</h1>
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <p class="text-gray-600 mb-4">{{ tool.description }}</p>
+            <p class="mb-2"><strong>Website:</strong> <a href="{{ tool.website_url }}" class="text-blue-500 hover:underline" target="_blank">{{ tool.website_url }}</a></p>
+            <p class="mb-2"><strong>Transactional Execution:</strong> {% if tool.transactional_execution %}Yes{% else %}No{% endif %}</p>
+            <p class="mb-2"><strong>High Performance:</strong> {% if tool.high_performance %}Yes{% else %}No{% endif %}</p>
+            <p class="mb-2"><strong>Cloud Scalability:</strong> {% if tool.cloud_scalability %}Yes{% else %}No{% endif %}</p>
+            <p class="mb-2"><strong>Primary Language:</strong> {{ tool.primary_language }}</p>
+            <p class="mb-2"><strong>Status:</strong> {{ tool.status }}</p>
+            <p class="mb-2"><strong>Submitted:</strong> {{ tool.submitted_at | date: "%Y-%m-%d %H:%M:%S" }}</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tool Submissions - Workflow Orchestration Tools</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-900 font-sans">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-6">Tool Submissions</h1>
+
+        <section class="mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Pending Tools</h2>
+            {% if pendingTools.size > 0 %}
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {% for tool in pendingTools %}
+                    <div class="bg-white shadow-md rounded-lg p-4">
+                        <h3 class="text-xl font-semibold mb-2">{{ tool.name }}</h3>
+                        <p class="text-gray-600 mb-2">{{ tool.description }}</p>
+                        <a href="/tool-submission/{{ tool.id }}" class="text-blue-500 hover:underline">View Details</a>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>No pending tools at the moment.</p>
+            {% endif %}
+        </section>
+
+        <section class="mb-8">
+            <h2 class="text-2xl font-semibold mb-4">In Review Tools</h2>
+            {% if inReviewTools.size > 0 %}
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {% for tool in inReviewTools %}
+                    <div class="bg-white shadow-md rounded-lg p-4">
+                        <h3 class="text-xl font-semibold mb-2">{{ tool.name }}</h3>
+                        <p class="text-gray-600 mb-2">{{ tool.description }}</p>
+                        <a href="/tool-submission/{{ tool.id }}" class="text-blue-500 hover:underline">View Details</a>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>No tools in review at the moment.</p>
+            {% endif %}
+        </section>
+
+        <section class="mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Approved Tools</h2>
+            {% if approvedTools.size > 0 %}
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {% for tool in approvedTools %}
+                    <div class="bg-white shadow-md rounded-lg p-4">
+                        <h3 class="text-xl font-semibold mb-2">{{ tool.name }}</h3>
+                        <p class="text-gray-600 mb-2">{{ tool.description }}</p>
+                        <a href="/tool-submission/{{ tool.id }}" class="text-blue-500 hover:underline">View Details</a>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>No approved tools at the moment.</p>
+            {% endif %}
+        </section>
+
+        <section class="mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Rejected Tools</h2>
+            {% if rejectedTools.size > 0 %}
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {% for tool in rejectedTools %}
+                    <div class="bg-white shadow-md rounded-lg p-4">
+                        <h3 class="text-xl font-semibold mb-2">{{ tool.name }}</h3>
+                        <p class="text-gray-600 mb-2">{{ tool.description }}</p>
+                        <a href="/tool-submission/{{ tool.id }}" class="text-blue-500 hover:underline">View Details</a>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>No rejected tools at the moment.</p>
+            {% endif %}
+        </section>
+    </div>
+</body>
+</html>

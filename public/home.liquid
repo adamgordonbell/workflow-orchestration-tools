@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workflow Orchestration Tools</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4CAF50',
+                        secondary: '#45a049',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-100 text-gray-900 font-sans">
+    <nav class="bg-white shadow-md">
+        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <div class="text-2xl font-bold text-primary">WorkflowTools</div>
+            <div>
+                <a href="#features" class="text-gray-800 hover:text-primary mx-3">Features</a>
+                <a href="#tools" class="text-gray-800 hover:text-primary mx-3">Tools</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="bg-gradient-to-r from-primary to-secondary text-white">
+        <div class="container mx-auto px-6 py-24 text-center">
+            <h1 class="text-5xl font-bold mb-4">Workflow Orchestration Tools</h1>
+            <p class="text-xl mb-8">Everything you need to know about workflow orchestration, and the tools to build and manage complex data pipelines.</p>
+            <a href="#tools" class="bg-white text-primary font-bold py-3 px-8 rounded-full hover:bg-gray-100 transition duration-300">Explore Tools</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+        <section id="features" class="mb-20">
+            <h2 class="text-3xl font-semibold mb-10 text-center">Key Features of Workflow Orchestration Tools</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {% for feature in features %}
+                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300">
+                    <h3 class="text-xl font-semibold mb-2 text-primary">{{ feature.name }}</h3>
+                    <p>{{ feature.description }}</p>
+                    <p class="mt-2 text-sm text-gray-600">Importance: {{ feature.importance }}/5</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+     <section id="feature-submission" class="mb-20 text-center">
+            <h2 class="text-3xl font-semibold mb-6">Contribute to Our Feature List</h2>
+            <p class="mb-6">Have an idea for a key feature of workflow orchestration tools? Share it with us!</p>
+            <a href="/add-feature" class="bg-primary text-white font-bold py-3 px-8 rounded-full hover:bg-secondary transition duration-300">
+                Add New Feature
+            </a>
+        </section>
+         <section id="tools">
+            <h2 class="text-3xl font-semibold mb-10 text-center">Workflow Orchestration Tools</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {% for tool in tools %}
+                    {% if tool.isSentinel %}
+                        <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300 flex flex-col items-center justify-center">
+                            <p class="text-xl text-gray-500 mb-4">Add your tool here</p>
+                            <button onclick="reserveSlot({{ tool.slot_number }})" class="bg-primary text-white font-bold py-2 px-4 rounded hover:bg-secondary transition duration-300">
+                                Submit a Tool
+                            </button>
+                        </div>
+                    {% else %}
+                        <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300">
+                            {% if tool.status == 'pending' %}
+                                <p class="italic text-gray-500">Pending Review</p>
+                            {% elsif tool.status == 'in_review' %}
+                                <p class="italic text-blue-500">In Review</p>
+                            {% else %}
+                                <h3 class="text-2xl font-semibold mb-4 text-primary">{{ tool.name }}</h3>
+                                <p class="mb-4">{{ tool.description }}</p>
+                                <p class="text-sm text-gray-600">Primary Language: {{ tool.primary_language }}</p>
+                                <p class="text-sm text-gray-600">{% if tool.transactional_execution %}Transactional Execution{% endif %}</p>
+                                <p class="text-sm text-gray-600">{% if tool.high_performance %}High Performance{% endif %}</p>
+                                <p class="text-sm text-gray-600">{% if tool.cloud_scalability %}Cloud Scalable{% endif %}</p>
+                                <a href="{{ tool.website_url }}" class="text-primary hover:underline mt-2 inline-block">Learn more →</a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </section>
+
+        <section id="tool-submissions" class="mt-20">
+            <h2 class="text-3xl font-semibold mb-10 text-center">Tool Submissions</h2>
+            <div class="flex justify-center space-x-4">
+                <a href="/tool-submissions" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                    View Submissions
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2024 WorkflowTools. All rights reserved.</p>
+        </div>
+    </footer>
+<script>
+        async function reserveSlot(slot_number) {
+            try {
+                console.log(slot_number);
+                const response = await axios.post('/create-pending-tool', { slot_number: slot_number });
+                if (response.data && response.data.toolId) {
+                    window.location.href = `/add-tool/${response.data.toolId}/?workflowUUID=${response.data.workflowUUID}`;
+                } else {
+                    alert('Failed to reserve slot. It may have been taken. Please try another slot.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while reserving the slot. Please try again.');
+            }
+        }
+    </script>
+</body>
+</html>
